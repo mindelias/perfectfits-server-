@@ -1,0 +1,41 @@
+const { GraphQLServer } = require("graphql-yoga");
+const { ApolloServer } = require("apollo-server-express");
+const { importSchema } = require("graphql-import");
+const Mutation = require("./resolvers/Mutation");
+const Query = require("./resolvers/Query");
+const db = require("./db");
+
+// create the GraphQl Yoga Server
+function createServer() {
+  return new GraphQLServer({
+    typeDefs: "src/schema.graphql",
+    resolvers: {
+      Mutation,
+      Query,
+    },
+    resolverValidationOptions: {
+      requireResolversForResolveType: false,
+    },
+    context: (req) => ({ ...req, db }),
+  });
+}
+
+
+
+
+
+//  create the GraphQl Apollo Server
+// const typeDefs = importSchema("./src/schema.graphql");
+// function createServer() {
+//   return new ApolloServer({
+//     typeDefs,
+//     resolvers: {
+//       Mutation,
+//       Query,
+//     },
+
+//     context: (req) => ({ ...req, db }),
+//   });
+// }
+
+module.exports = createServer;
